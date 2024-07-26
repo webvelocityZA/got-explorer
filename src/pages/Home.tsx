@@ -1,6 +1,6 @@
+import images from "@images";
 import { Castle, Sword } from "lucide-react";
 import { Link } from "react-router-dom";
-import images from "@images";
 
 const BackgroundImage = () => (
   <div
@@ -23,10 +23,10 @@ const Logo = () => (
   </div>
 );
 
-const NavButton = ({ to, icon, text }) => (
+const NavButton = ({ to, text }: { to: string; text: string }) => (
   <Link
     to={to}
-    className="flex items-center justify-center px-6 py-4 bg-gray-800 bg-opacity-70 rounded-lg hover:bg-opacity-90 transition-all duration-300 group"
+    className="flex items-center justify-center px-6 py-4 bg-gray-900 bg-opacity-100 rounded-lg hover:bg-opacity-90 transition-all duration-300 group"
   >
     <span className="ml-3 text-xl font-semibold group-hover:text-yellow-400 transition-colors duration-300 uppercase">
       {text}

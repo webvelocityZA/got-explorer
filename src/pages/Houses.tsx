@@ -1,9 +1,9 @@
 import images from "@images";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Character, House } from "../models/models";
 import { fetchCharacter, fetchHouse } from "../utils/api";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const houseBackgrounds = {
   Baratheon: images.baratheon_bg,
