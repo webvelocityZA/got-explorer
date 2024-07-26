@@ -12,7 +12,6 @@ import targaryen_bg from '../images/houses/targaryen_bg.svg';
 import lannister_bg from '../images/houses/lannister_bg.svg';
 import greyjoy_bg from '../images/houses/greyjoy_bg.svg';
 import charaters_bg from '../images/characters_bg.jpg';
-import half_bg from '../images/half.png';
 
 
 const exports: { [key: string]: string } = {
@@ -25,7 +24,6 @@ const exports: { [key: string]: string } = {
   lannister_bg,
   greyjoy_bg,
   charaters_bg,
-  half_bg,
 };
 
 // Process character images
