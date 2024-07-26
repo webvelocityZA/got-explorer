@@ -7,7 +7,9 @@ import CharacterList from "../components/Characters/CharacterList";
 import CharacterDetails from "../components/Characters/CharacterDetails";
 
 export default function Characters() {
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
+    null
+  );
   const [houses, setHouses] = useState<House[]>([]);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -24,7 +26,7 @@ export default function Characters() {
     setLoading(true);
     try {
       const char = await fetchCharacter(id.toString());
-      setSelectedCharacter(char);
+      setSelectedCharacter(char as Character);
 
       const houseDetails = await Promise.all(
         char.allegiances.map((houseUrl) => {
@@ -32,7 +34,7 @@ export default function Characters() {
           return fetchHouse(houseId);
         })
       );
-      setHouses(houseDetails);
+      setHouses(houseDetails as House[]);
     } catch (error) {
       console.error("Error fetching character data:", error);
     } finally {
@@ -52,26 +54,28 @@ export default function Characters() {
           Characters
         </h1>
         <div className="text-[#f9da5c] text-md font-bold fixed bottom-[2rem] right-8 uppercase">
-          <Link to="/" className="tracking-widest">Home</Link>
-          <Link to="/houses" className="ml-4 tracking-widest">Houses</Link>
+          <Link to="/" className="tracking-widest">
+            Home
+          </Link>
+          <Link to="/houses" className="ml-4 tracking-widest">
+            Houses
+          </Link>
         </div>
         {!selectedCharacter ? (
           <CharacterList
             characters={keyCharacters}
             onCharacterSelect={handleCharacterSelect}
           />
+        ) : loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
+          </div>
         ) : (
-          loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
-            </div>
-          ) : (
-            <CharacterDetails
-              character={selectedCharacter}
-              houses={houses}
-              onClose={handleClose}
-            />
-          )
+          <CharacterDetails
+            character={selectedCharacter}
+            houses={houses}
+            onClose={handleClose}
+          />
         )}
       </div>
     </div>

@@ -42,8 +42,11 @@ export default function Houses() {
       : houseBackgrounds.default
     );
 
-    setCurrentLord(await fetchCharacterDetails(houseDetails.currentLord));
-    setHeir(await fetchCharacterDetails(houseDetails.heir));
+    const currentLordDetails = await fetchCharacterDetails(houseDetails.currentLord);
+    if (currentLordDetails) setCurrentLord(currentLordDetails as Character);
+
+    const heirDetails = await fetchCharacterDetails(houseDetails.heir);
+    if (heirDetails) setHeir(heirDetails as Character);
 
     const swornMemberPromises = houseDetails.swornMembers.map(async (url) => {
       const character = await fetchCharacterDetails(url);
