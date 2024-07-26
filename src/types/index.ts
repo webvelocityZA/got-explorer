@@ -1,8 +1,4 @@
-export interface Character {
-    url: string;
-    name: string;
-    titles: string[];
-  }
+
   
   export interface House {
     id: number;
@@ -26,4 +22,27 @@ export interface Character {
   export interface SwornMember {
     id: string;
     name: string;
+  }
+
+  export interface Character {
+    id: number;
+    name: string;
+    titles: string[];
+    culture: string;
+    born: string;
+    aliases: string[];
+    playedBy: string[];
+    tvSeries: string[];
+    allegiances: string[];
+  }
+  
+  export interface KeyCharacter {
+    id: number;
+    name: string;
+  }
+
+  export interface MCharacter {
+    url: string;
+    name: string;
+    titles: string[];
   }

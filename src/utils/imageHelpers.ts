@@ -15,6 +15,21 @@ export const getImage = (id: number, type: "house" | "character"): string => {
   return images.default_character;
 };
 
+export const getCharacterImage = (name: string): string => {
+  const normalizedName = name.toLowerCase().replace(/\s+/g, "_");
+  const possibleKeys = Object.keys(images).filter(
+    (key) =>
+      key.toLowerCase().includes(normalizedName) ||
+      normalizedName.includes(key.toLowerCase())
+  );
+
+  if (possibleKeys.length > 0) {
+    return images[possibleKeys[0]];
+  }
+
+  return images.default_character || "path/to/default/image.jpg";
+}
+
 export const houseBackgrounds = {
   Baratheon: images.baratheon_bg,
   Stark: images.stark_bg,
