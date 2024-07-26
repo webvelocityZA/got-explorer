@@ -35,7 +35,7 @@ const HouseDetails: React.FC<HouseDetailsProps> = ({
 
   return (
     <div
-      className="w-full md:w-1/2 p-8 max-h-[100vh] overflow-y-scroll"
+      className="w-full md:w-1/2 p-8 md:max-h-[100vh] overflow-y-scroll"
       style={{
         backgroundImage: `url(${currentBackground})`,
         backgroundRepeat: "no-repeat",
@@ -55,7 +55,7 @@ const HouseDetails: React.FC<HouseDetailsProps> = ({
         </Link>
       </div>
       <div>
-        <h2 className="text-md md:text-3xl font-bold mb-4 thrones-font tracking-widest max-w-[48%]">
+        <h2 className="text-md md:text-3xl font-bold mb-4 thrones-font tracking-widest md:max-w-[48%]">
           {selectedHouse.name}
         </h2>
         <h3 className="text-xl font-bold mb-4 text-[#f9da5c] uppercase">
