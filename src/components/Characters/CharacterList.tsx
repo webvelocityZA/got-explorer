@@ -9,7 +9,7 @@ interface CharacterListProps {
 
 const CharacterList: React.FC<CharacterListProps> = ({ characters, onCharacterSelect }) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-16">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 md:mt-16 mr-4 md:mr-0">
       {characters.map((char) => (
         <div
           key={char.id}
@@ -20,7 +20,7 @@ const CharacterList: React.FC<CharacterListProps> = ({ characters, onCharacterSe
             <img
               src={getCharacterImage(char.name)}
               alt={char.name}
-              className="w-full h-64 object-cover"
+              className="w-full md:h-64 object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">

@@ -2,6 +2,12 @@
 
 This project is a simple web application that allows users to explore the Game of Thrones universe. It is built using [React](https://reactjs.org/) and [Vite](https://vitejs.dev/).
 
+## Features
+
+- View some characters from the Game of Thrones universe. More characters are show under each house. Click on the house to view more characters.
+- View some houses from the Game of Thrones universe
+- Responsive design
+
 ## Getting Started
 
 To get started, clone the repository and install the dependencies:

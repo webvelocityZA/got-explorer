@@ -10,10 +10,10 @@ interface CharacterDetailsProps {
 
 const CharacterDetails: React.FC<CharacterDetailsProps> = ({ character, houses, onClose }) => {
   return (
-    <div className="bg-[#131415] rounded-lg shadow-lg p-8 mt-16">
+    <div className="bg-[#131415] rounded-lg shadow-lg p-6 md:p-8 md:mt-16 mr-4 md:mr-0">
       <button
         onClick={onClose}
-        className="absolute top-[3rem] right-[3rem] bg-gray-500 p-2 rounded-full text-gray-400 hover:text-white mt-16"
+        className="absolute top-[1rem] right-[1.8rem] md:top-[3rem] md:right-[3rem] bg-gray-500 p-2 rounded-full text-gray-400 hover:text-white md:mt-16"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
