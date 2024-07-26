@@ -1,6 +1,6 @@
-import React from 'react';
-import { KeyHouse } from '../../types';
-import { getImage } from '../../utils/imageHelpers';
+import React from "react";
+import { KeyHouse } from "../../types";
+import { getImage } from "../../utils/imageHelpers";
 
 interface HouseListProps {
   keyHouses: KeyHouse[];
@@ -9,10 +9,15 @@ interface HouseListProps {
   handleHouseClick: (id: number) => void;
 }
 
-const HouseList: React.FC<HouseListProps> = ({ keyHouses, activeHouse, setActiveHouse, handleHouseClick }) => {
+const HouseList: React.FC<HouseListProps> = ({
+  keyHouses,
+  activeHouse,
+  setActiveHouse,
+  handleHouseClick,
+}) => {
   return (
-    <nav aria-label="House list" className="h-[100vh]">
-      <ul className="grid grid-cols-5 flex-row h-[100vh]">
+    <nav aria-label="House list" className="md:h-[100vh]">
+      <ul className="grid grid-cols-5 flex-row h-[50vh] md:h-[100vh]">
         {keyHouses.map((house) => (
           <li
             key={house.id}
@@ -29,7 +34,7 @@ const HouseList: React.FC<HouseListProps> = ({ keyHouses, activeHouse, setActive
               <img
                 src={getImage(house.id, "house")}
                 alt={house.name}
-                className="w-auto h-screen max-h-screen object-cover"
+                className="w-auto h-[50vh] md:h-screen md:max-h-screen object-cover"
               />
             </div>
           </li>
