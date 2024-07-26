@@ -1,6 +1,10 @@
 import images from "@images";
-import { Castle, Sword } from "lucide-react";
 import { Link } from "react-router-dom";
+
+interface NavigationButtonProps {
+  to: string;
+  text: string;
+}
 
 const BackgroundImage = () => (
   <div
@@ -23,16 +27,18 @@ const Logo = () => (
   </div>
 );
 
-const NavButton = ({ to, text }: { to: string; text: string }) => (
-  <Link
-    to={to}
-    className="flex items-center justify-center px-6 py-4 bg-gray-900 bg-opacity-100 rounded-lg hover:bg-opacity-90 transition-all duration-300 group"
-  >
-    <span className="ml-3 text-xl font-semibold group-hover:text-yellow-400 transition-colors duration-300 uppercase">
-      {text}
-    </span>
-  </Link>
-);
+const NavButton: React.FC<NavigationButtonProps> = ({ to, text }) => {
+  return (
+    <Link
+      to={to}
+      className="flex items-center justify-center px-6 py-4 bg-gray-900 bg-opacity-100 rounded-lg hover:bg-opacity-90 transition-all duration-300 group"
+    >
+      <span className="ml-3 text-xl font-semibold group-hover:text-yellow-400 transition-colors duration-300 uppercase">
+        {text}
+      </span>
+    </Link>
+  );
+};
 
 export default function Home() {
   return (
@@ -48,16 +54,8 @@ export default function Home() {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-          <NavButton
-            to="/houses"
-            icon={<Castle size={24} className="text-yellow-500" />}
-            text="Houses"
-          />
-          <NavButton
-            to="/characters"
-            icon={<Sword size={24} className="text-red-500" />}
-            text="Characters"
-          />
+          <NavButton to="/houses" text="Houses" />
+          <NavButton to="/characters" text="Characters" />
         </div>
       </div>
     </div>
