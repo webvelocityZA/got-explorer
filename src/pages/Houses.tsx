@@ -228,7 +228,7 @@ export default function Houses() {
           backgroundImage: `url(${currentBackground})`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "right bottom",
-          backgroundSize: "650px",
+          backgroundSize: "550px",
         }}
       >
         <h1 className="thrones-font text-lg font-bold fixed right-8">Houses</h1>

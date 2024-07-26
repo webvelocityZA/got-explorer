@@ -60,31 +60,30 @@ export default function Characters() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#705c57] text-gray-100"         style={{
-      backgroundImage: `url(${images.dragon})`,
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center",
-      backgroundSize: "cover",
-    }}>
+    <div
+      className="flex h-screen overflow-hidden bg-[#000] text-gray-100"
+      style={{
+        backgroundImage: `url(${images.dragon})`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+      }}
+    >
       <div className="w-1/2 relative">
-        {/* <img
+        <img
           src={images.characters_bg}
           alt="Game of Thrones Banner"
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <h1 className="text-4xl font-bold text-center text-gray-100 font-serif">
-            Game of Thrones
-            <br />
-            Characters
-          </h1>
-        </div> */}
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"></div>
       </div>
 
       <div className="w-1/2 p-8 overflow-y-auto">
+        <h1 className="thrones-font text-lg font-bold fixed right-8">
+          Characters
+        </h1>
         {!selectedCharacter ? (
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-16">
             {keyCharacters.map((char) => (
               <div
                 key={char.id}
@@ -99,7 +98,9 @@ export default function Characters() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <h2 className="text-xl font-bold">{char.name}</h2>
+                    <h2 className="text-md thrones-font font-bold">
+                      {char.name}
+                    </h2>
                   </div>
                 </div>
               </div>
@@ -107,7 +108,7 @@ export default function Characters() {
           </div>
         ) : (
           // Character detail view
-          <div className="bg-gray-800 rounded-lg shadow-lg p-8">
+          <div className="bg-[#131415] rounded-lg shadow-lg p-8  mt-16">
             {loading ? (
               <div className="flex justify-center items-center h-64">
                 <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
@@ -116,39 +117,78 @@ export default function Characters() {
               <>
                 <button
                   onClick={handleClose}
-                  className="absolute top-10 right-10 text-gray-400 hover:text-white"
+                  className="absolute top-[3rem] right-[3rem] bg-gray-500 p-2 rounded-full text-gray-400 hover:text-white mt-16"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
-                <h2 className="text-4xl font-bold mb-6">{selectedCharacter.name}</h2>
-                <div className="flex flex-col md:flex-row gap-8 mb-8">
+                <h2 className="text-2xl thrones-font font-bold mb-1">
+                  {selectedCharacter.name}
+                </h2>
+                <p className="mb-6 muted text-sm">
+                  {selectedCharacter.titles.join(", ")}
+                </p>
+                <div className="flex flex-col md:flex-row gap-8 mb-6">
                   <img
                     src={getCharacterImage(selectedCharacter.name)}
                     alt={selectedCharacter.name}
                     className="w-full md:w-1/3 h-auto object-cover rounded-lg shadow-lg"
                   />
                   <div className="w-full md:w-2/3">
-                    <p><strong>Gender:</strong> {selectedCharacter.gender}</p>
-                    <p><strong>Culture:</strong> {selectedCharacter.culture}</p>
-                    <p><strong>Born:</strong> {selectedCharacter.born}</p>
-                    <p><strong>Titles:</strong> {selectedCharacter.titles.join(", ")}</p>
-                    <p><strong>Aliases:</strong> {selectedCharacter.aliases.join(", ")}</p>
-                    <p><strong>Played By:</strong> {selectedCharacter.playedBy.join(", ")}</p>
-                    <p><strong>TV Series:</strong> {selectedCharacter.tvSeries.join(", ")}</p>
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold mb-4">Allegiances</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {houses.map((house) => (
-                    <div key={house.url} className="bg-gray-700 p-4 rounded-lg shadow">
-                      <h4 className="text-xl font-semibold mb-2">{house.name}</h4>
-                      <p><strong>Region:</strong> {house.region}</p>
-                      <p><strong>Words:</strong> {house.words}</p>
-                      <p><strong>Coat of Arms:</strong> {house.coatOfArms}</p>
+                    <p>
+                      Hailing from the {selectedCharacter.culture} culture and
+                      born on {selectedCharacter.born}.
+                    </p>
+                    <p>
+                      Also known by the aliases:{" "}
+                      {selectedCharacter.aliases.join(", ")}.
+                    </p>
+                    <br />
+                    <p>
+                      This character is portrayed in the TV series Game of
+                      Thrones by {selectedCharacter.playedBy.join(", ")} and
+                      appears in the following seasons of the TV series:{" "}
+                      {selectedCharacter.tvSeries.join(", ")}.
+                    </p>
+                    <div className="mt-8">
+                      <div className="w-full">
+                        <div className="grid grid-cols-1">
+                          {houses.map((house) => (
+                            <div
+                              key={house.url}
+                              className="bg-[#292929] p-4 rounded-lg shadow"
+                            >
+                              <h4 className="text-lg font-semibold mb-2 text-[#f9da5c] uppercase">
+                                {house.name}
+                              </h4>
+                              <p>
+                                <strong>Region:</strong> {house.region}
+                              </p>
+                              <p>
+                                <strong>Words:</strong> {house.words}
+                              </p>
+                              <p>
+                                <strong>Coat of Arms:</strong>{" "}
+                                {house.coatOfArms}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
               </>
             )}
