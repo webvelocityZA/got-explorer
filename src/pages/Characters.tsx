@@ -1,56 +1,79 @@
-import { Link } from "react-router-dom";
-import images from "@images";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Character, House } from "../types";
+import { fetchCharacter, fetchHouse } from "../utils/api";
+import { keyCharacters } from "../utils/characterData";
+import CharacterList from "../components/Characters/CharacterList";
+import CharacterDetails from "../components/Characters/CharacterDetails";
 
 export default function Characters() {
-  const keyCharacters = [
-    { id: 583, name: "Jon Snow" },
-    { id: 1303, name: "Daenerys Targaryen" },
-    { id: 210, name: "Brandon Stark" },
-  ];
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [houses, setHouses] = useState<House[]>([]);
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
-  // Function to find the best matching image for the character
-  const getCharacterImage = (name: string) => {
-    const normalizedName = name.toLowerCase().replace(/\s+/g, "_");
-    const possibleKeys = Object.keys(images).filter(
-      (key) =>
-        key.toLowerCase().includes(normalizedName) ||
-        normalizedName.includes(key.toLowerCase())
-    );
-
-    if (possibleKeys.length > 0) {
-      // Use the first matching image found
-      return images[possibleKeys[0]];
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const characterId = searchParams.get("id");
+    if (characterId) {
+      handleCharacterSelect(parseInt(characterId));
     }
+  }, [location]);
 
-    // If no matching image is found, return a default image
-    return images.default_character || "jon snow";
+  const handleCharacterSelect = async (id: number) => {
+    setLoading(true);
+    try {
+      const char = await fetchCharacter(id.toString());
+      setSelectedCharacter(char);
+
+      const houseDetails = await Promise.all(
+        char.allegiances.map((houseUrl) => {
+          const houseId = houseUrl.split("/houses/")[1];
+          return fetchHouse(houseId);
+        })
+      );
+      setHouses(houseDetails);
+    } catch (error) {
+      console.error("Error fetching character data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setSelectedCharacter(null);
+    setHouses([]);
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold my-12">Character Explorer</h1>
-      <nav aria-label="Character list">
-        <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {keyCharacters.map((char) => (
-            <li key={char.id}>
-              <Link
-                to={`/character/${char.id}`}
-                className="flex items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
-              >
-                <img
-                  src={getCharacterImage(char.name)}
-                  alt=""
-                  className="w-16 h-16 rounded-full object-cover mr-4"
-                  aria-hidden="true"
-                />
-                <span className="text-lg font-semibold text-blue-600 hover:underline">
-                  {char.name}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+    <div className="flex h-screen overflow-hidden bg-[#000] text-gray-100">
+      <div className="w-full p-8 overflow-y-auto">
+        <h1 className="thrones-font text-lg font-bold fixed right-8">
+          Characters
+        </h1>
+        <div className="text-[#f9da5c] text-md font-bold fixed bottom-[2rem] right-8 uppercase">
+          <Link to="/" className="tracking-widest">Home</Link>
+          <Link to="/houses" className="ml-4 tracking-widest">Houses</Link>
+        </div>
+        {!selectedCharacter ? (
+          <CharacterList
+            characters={keyCharacters}
+            onCharacterSelect={handleCharacterSelect}
+          />
+        ) : (
+          loading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
+            </div>
+          ) : (
+            <CharacterDetails
+              character={selectedCharacter}
+              houses={houses}
+              onClose={handleClose}
+            />
+          )
+        )}
+      </div>
     </div>
   );
 }

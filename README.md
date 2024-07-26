@@ -22,3 +22,11 @@ npm run dev
 
 This project is open source and available under the [MIT License](LICENSE).
 
+## Images
+Most of the images were generated using AI via ideogram. The images are not for commercial use and are only for research purposes.
+
+
+## Credits
+https://www.behance.net/gallery/78902755/Game-Of-Thrones-Portraits by [Amanda Mocci](https://www.behance.net/amocci)
+
+
