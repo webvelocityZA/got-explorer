@@ -7,7 +7,6 @@ import { fetchCharacter, fetchHouse } from "../utils/api";
 import { keyHouses } from "../utils/houseData";
 import { houseBackgrounds } from "../utils/imageHelpers";
 
-
 export default function Houses() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,7 +16,9 @@ export default function Houses() {
   const [heir, setHeir] = useState<Character | null>(null);
   const [swornMembers, setSwornMembers] = useState<SwornMember[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentBackground, setCurrentBackground] = useState(houseBackgrounds.default);
+  const [currentBackground, setCurrentBackground] = useState(
+    houseBackgrounds.default
+  );
   const membersPerPage = 10;
 
   const fetchCharacterDetails = useCallback(async (url: string) => {
@@ -29,32 +30,42 @@ export default function Houses() {
     return null;
   }, []);
 
-  const handleHouseClick = useCallback(async (id: { toString: () => string; }) => {
-    const houseDetails = await fetchHouse(id.toString());
-    setSelectedHouse({ ...houseDetails, id: parseInt(id.toString()) });
-    setCurrentPage(1);
+  const handleHouseClick = useCallback(
+    async (id: { toString: () => string }) => {
+      const houseDetails = await fetchHouse(id.toString());
+      setSelectedHouse({ ...houseDetails, id: parseInt(id.toString()) });
+      setCurrentPage(1);
 
-    navigate(`?houseId=${id}`, { replace: true });
+      navigate(`?houseId=${id}`, { replace: true });
 
-    const selectedHouse = keyHouses.find(house => house.id === id);
-    setCurrentBackground(selectedHouse 
-      ? houseBackgrounds[selectedHouse.shortName as keyof typeof houseBackgrounds] 
-      : houseBackgrounds.default
-    );
+      const selectedHouse = keyHouses.find((house) => house.id === id);
+      setCurrentBackground(
+        selectedHouse
+          ? houseBackgrounds[
+              selectedHouse.shortName as keyof typeof houseBackgrounds
+            ]
+          : houseBackgrounds.default
+      );
 
-    const currentLordDetails = await fetchCharacterDetails(houseDetails.currentLord);
-    if (currentLordDetails) setCurrentLord(currentLordDetails as Character);
+      const currentLordDetails = await fetchCharacterDetails(
+        houseDetails.currentLord
+      );
+      if (currentLordDetails) setCurrentLord(currentLordDetails as Character);
 
-    const heirDetails = await fetchCharacterDetails(houseDetails.heir);
-    if (heirDetails) setHeir(heirDetails as Character);
+      const heirDetails = await fetchCharacterDetails(houseDetails.heir);
+      if (heirDetails) setHeir(heirDetails as Character);
 
-    const swornMemberPromises = houseDetails.swornMembers.map(async (url) => {
-      const character = await fetchCharacterDetails(url);
-      return character ? { id: character.url.split("/").pop() || "", name: character.name } : { id: "", name: "Unknown Member" };
-    });
-    const swornMemberDetails = await Promise.all(swornMemberPromises);
-    setSwornMembers(swornMemberDetails);
-  }, [fetchCharacterDetails, navigate]);
+      const swornMemberPromises = houseDetails.swornMembers.map(async (url) => {
+        const character = await fetchCharacterDetails(url);
+        return character
+          ? { id: character.url.split("/").pop() || "", name: character.name }
+          : { id: "", name: "Unknown Member" };
+      });
+      const swornMemberDetails = await Promise.all(swornMemberPromises);
+      setSwornMembers(swornMemberDetails);
+    },
+    [fetchCharacterDetails, navigate]
+  );
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -68,11 +79,10 @@ export default function Houses() {
       handleHouseClick(keyHouses[0].id);
     }
   }, [location.search, handleHouseClick]);
-  
 
   return (
-    <div className="mx-auto flex flex-row h-[100vh] overflow-hidden">
-      <div className="w-1/2">
+    <div className="mx-auto flex flex-col md:flex-row min-h-[100vh] md:h-[100vh] overflow-hidden">
+      <div className="w-full md:w-1/2">
         <HouseList
           keyHouses={keyHouses}
           activeHouse={activeHouse}
