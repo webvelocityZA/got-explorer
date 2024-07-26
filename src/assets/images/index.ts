@@ -3,27 +3,29 @@ const characterImages = import.meta.glob('../images/characters/**/*.{png,jpg,svg
 const houseImages = import.meta.glob('../images/houses/**/*.{png,jpg,svg}', { eager: true });
 
 // Manual imports for other images
+import homepage_bg from '../images/homepage_bg.jpg';
 import default_character from '../images/default_character.png';
-import winterfield_pattern from '../images/patterns/_362.png';
-import characters_bg from '../images/patterns/characters_bg.png';
-import main_bg from '../images/westeros.svg';
+import main_bg from '../images/main_bg.svg';
 import baratheon_bg from '../images/houses/baratheon_bg.svg';
 import stark_bg from '../images/houses/stark_bg.svg';
 import targaryen_bg from '../images/houses/targaryen_bg.svg';
 import lannister_bg from '../images/houses/lannister_bg.svg';
 import greyjoy_bg from '../images/houses/greyjoy_bg.svg';
+import charaters_bg from '../images/characters_bg.jpg';
+import half_bg from '../images/half.png';
 
 
 const exports: { [key: string]: string } = {
+  homepage_bg,
   default_character,
   main_bg,
-  winterfield_pattern,
-  characters_bg,
   baratheon_bg,
   stark_bg,
   targaryen_bg,
   lannister_bg,
   greyjoy_bg,
+  charaters_bg,
+  half_bg,
 };
 
 // Process character images

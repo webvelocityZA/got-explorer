@@ -2,7 +2,7 @@ import images from "@images";
 import { useEffect, useState } from "react";
 import { Character, House } from "../models/models";
 import { fetchCharacter, fetchHouse } from "../utils/api";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const houseBackgrounds = {
@@ -232,6 +232,10 @@ export default function Houses() {
         }}
       >
         <h1 className="thrones-font text-lg font-bold fixed right-8">Houses</h1>
+        <div className="text-[#f9da5c] text-md font-bold fixed bottom-[2rem] right-8 uppercase">
+        <Link to="/" className="tracking-widest">Home</Link>
+        <Link to="/characters" className="ml-4 tracking-widest">Characters</Link>
+        </div>
         {selectedHouse ? (
           <div>
             <h2 className="text-3xl font-bold mb-4 thrones-font tracking-widest max-w-[48%]">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import images from "@images";
 import { fetchCharacter, fetchHouse } from "../utils/api";
 import { Character, House } from "../models/models";
+import { Link } from "react-router-dom";
 
 const keyCharacters = [
   { id: 583, name: "Jon Snow" },
@@ -62,26 +63,21 @@ export default function Characters() {
   return (
     <div
       className="flex h-screen overflow-hidden bg-[#000] text-gray-100"
-      style={{
-        backgroundImage: `url(${images.dragon})`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }}
+      // style={{
+      //   backgroundImage: `url(${images.charaters_bg})`,
+      //   backgroundRepeat: "repeat",
+      //   backgroundPosition: "right center",
+      //   backgroundSize: "contain",
+      // }}
     >
-      <div className="w-1/2 relative">
-        <img
-          src={images.characters_bg}
-          alt="Game of Thrones Banner"
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"></div>
-      </div>
-
-      <div className="w-1/2 p-8 overflow-y-auto">
+      <div className="w-full p-8 overflow-y-auto">
         <h1 className="thrones-font text-lg font-bold fixed right-8">
           Characters
         </h1>
+        <div className="text-[#f9da5c] text-md font-bold fixed bottom-[2rem] right-8 uppercase">
+        <Link to="/" className="tracking-widest">Home</Link>
+        <Link to="/houses" className="ml-4 tracking-widest">Houses</Link>
+        </div>
         {!selectedCharacter ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-16">
             {keyCharacters.map((char) => (
@@ -140,7 +136,7 @@ export default function Characters() {
                 <p className="mb-6 muted text-sm">
                   {selectedCharacter.titles.join(", ")}
                 </p>
-                <div className="flex flex-col md:flex-row gap-8 mb-6">
+                <div className="flex flex-col md:flex-row gap-8 mb-6 md:max-h-[50vh]">
                   <img
                     src={getCharacterImage(selectedCharacter.name)}
                     alt={selectedCharacter.name}
