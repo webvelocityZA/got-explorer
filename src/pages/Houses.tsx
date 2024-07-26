@@ -22,7 +22,7 @@ export default function Houses() {
   const [selectedHouse, setSelectedHouse] = useState<House | null>(null);
   const [currentLord, setCurrentLord] = useState<Character | null>(null);
   const [heir, setHeir] = useState<Character | null>(null);
-  const [swornMembers, setSwornMembers] = useState<string[]>([]);
+  const [swornMembers, setSwornMembers] = useState<{ id: string, name: string }[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentBackground, setCurrentBackground] = useState(images.main_bg);
   const membersPerPage = 10;
@@ -45,7 +45,6 @@ export default function Houses() {
 
     loadHouses();
 
-    // Read the houseId from URL parameters
     const searchParams = new URLSearchParams(location.search);
     const houseId = searchParams.get("houseId");
     if (houseId) {
@@ -87,29 +86,23 @@ export default function Houses() {
     setSelectedHouse(houseDetails);
     setCurrentPage(1);
 
-    // Update URL with the selected house ID
     navigate(`?houseId=${id}`, { replace: true });
 
-    // Find the house based on the id and use its shortName for the background
     const selectedHouse = keyHouses.find(house => house.id === id);
     setCurrentBackground(selectedHouse 
       ? houseBackgrounds[selectedHouse.shortName] 
       : houseBackgrounds.default
     );
 
-    // Fetch current lord
     setCurrentLord(await fetchCharacterDetails(houseDetails.currentLord));
-
-    // Fetch heir
     setHeir(await fetchCharacterDetails(houseDetails.heir));
 
-    // Fetch sworn members names
     const swornMemberPromises = houseDetails.swornMembers.map(async (url) => {
       const character = await fetchCharacterDetails(url);
-      return character ? character.name : "Unknown Member";
+      return character ? { id: character.url.split("/").pop() || "", name: character.name } : { id: "", name: "Unknown Member" };
     });
-    const swornMemberNames = await Promise.all(swornMemberPromises);
-    setSwornMembers(swornMemberNames);
+    const swornMemberDetails = await Promise.all(swornMemberPromises);
+    setSwornMembers(swornMemberDetails);
   };
 
   const CharacterDisplay = ({
@@ -161,7 +154,12 @@ export default function Houses() {
           {currentMembers.map((member, index) => (
             <li key={index}>
               <span className="mr-3">➳</span>
-              {member}
+              <Link
+                to={`/characters?id=${member.id}`}
+                className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+              >
+                {member.name}
+              </Link>
             </li>
           ))}
         </ul>

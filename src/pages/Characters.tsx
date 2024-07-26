@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import images from "@images";
 import { fetchCharacter, fetchHouse } from "../utils/api";
 import { Character, House } from "../models/models";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const keyCharacters = [
   { id: 583, name: "Jon Snow" },
@@ -34,6 +34,15 @@ export default function Characters() {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [houses, setHouses] = useState([]);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const characterId = searchParams.get("id");
+    if (characterId) {
+      handleCharacterSelect(characterId);
+    }
+  }, [location]);
 
   const handleCharacterSelect = async (id) => {
     setLoading(true);
@@ -61,22 +70,14 @@ export default function Characters() {
   };
 
   return (
-    <div
-      className="flex h-screen overflow-hidden bg-[#000] text-gray-100"
-      // style={{
-      //   backgroundImage: `url(${images.charaters_bg})`,
-      //   backgroundRepeat: "repeat",
-      //   backgroundPosition: "right center",
-      //   backgroundSize: "contain",
-      // }}
-    >
+    <div className="flex h-screen overflow-hidden bg-[#000] text-gray-100">
       <div className="w-full p-8 overflow-y-auto">
         <h1 className="thrones-font text-lg font-bold fixed right-8">
           Characters
         </h1>
         <div className="text-[#f9da5c] text-md font-bold fixed bottom-[2rem] right-8 uppercase">
-        <Link to="/" className="tracking-widest">Home</Link>
-        <Link to="/houses" className="ml-4 tracking-widest">Houses</Link>
+          <Link to="/" className="tracking-widest">Home</Link>
+          <Link to="/houses" className="ml-4 tracking-widest">Houses</Link>
         </div>
         {!selectedCharacter ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-16">
@@ -104,7 +105,7 @@ export default function Characters() {
           </div>
         ) : (
           // Character detail view
-          <div className="bg-[#131415] rounded-lg shadow-lg p-8  mt-16">
+          <div className="bg-[#131415] rounded-lg shadow-lg p-8 mt-16">
             {loading ? (
               <div className="flex justify-center items-center h-64">
                 <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
@@ -136,7 +137,7 @@ export default function Characters() {
                 <p className="mb-6 muted text-sm">
                   {selectedCharacter.titles.join(", ")}
                 </p>
-                <div className="flex flex-col md:flex-row gap-8 mb-6 md:max-h-[50vh]">
+                <div className="flex flex-col md:flex-row gap-8 mb-6">
                   <img
                     src={getCharacterImage(selectedCharacter.name)}
                     alt={selectedCharacter.name}
@@ -164,7 +165,7 @@ export default function Characters() {
                           {houses.map((house) => (
                             <div
                               key={house.url}
-                              className="bg-[#292929] p-4 rounded-lg shadow"
+                              className="bg-[#292929] p-4 rounded-lg shadow mt-4"
                             >
                               <h4 className="text-lg font-semibold mb-2 text-[#f9da5c] uppercase">
                                 {house.name}
