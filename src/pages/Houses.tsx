@@ -2,7 +2,17 @@ import images from "@images";
 import { useEffect, useState } from "react";
 import { Character, House } from "../models/models";
 import { fetchCharacter, fetchHouse } from "../utils/api";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+const houseBackgrounds = {
+  Baratheon: images.baratheon_bg,
+  Stark: images.stark_bg,
+  Targaryen: images.targaryen_bg,
+  Lannister: images.lannister_bg,
+  Greyjoy: images.greyjoy_bg,
+  default: images.main_bg
+};
 
 export default function Houses() {
   const navigate = useNavigate();
@@ -14,14 +24,15 @@ export default function Houses() {
   const [heir, setHeir] = useState<Character | null>(null);
   const [swornMembers, setSwornMembers] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentBackground, setCurrentBackground] = useState(images.main_bg);
   const membersPerPage = 10;
 
   const keyHouses = [
-    { id: 362, name: "House Stark of Winterfell" },
-    { id: 378, name: "House Targaryen of King's Landing" },
-    { id: 229, name: "House Lannister of Casterly Rock" },
-    { id: 17, name: "House Baratheon of Storm's End" },
-    { id: 395, name: "House Greyjoy of Pyke" },
+    { id: 17, name: "House Baratheon of Storm's End", shortName: "Baratheon" },
+    { id: 362, name: "House Stark of Winterfell", shortName: "Stark" },
+    { id: 378, name: "House Targaryen of King's Landing", shortName: "Targaryen" },
+    { id: 229, name: "House Lannister of Casterly Rock", shortName: "Lannister" },
+    { id: 395, name: "House Greyjoy of Pyke", shortName: "Greyjoy" },
   ];
 
   useEffect(() => {
@@ -36,13 +47,14 @@ export default function Houses() {
 
     // Read the houseId from URL parameters
     const searchParams = new URLSearchParams(location.search);
-    const houseId = searchParams.get('houseId');
+    const houseId = searchParams.get("houseId");
     if (houseId) {
       const id = parseInt(houseId);
       setActiveHouse(id);
       handleHouseClick(id);
     } else {
       setActiveHouse(keyHouses[0].id);
+      handleHouseClick(keyHouses[0].id);
     }
   }, [location.search]);
 
@@ -78,6 +90,13 @@ export default function Houses() {
     // Update URL with the selected house ID
     navigate(`?houseId=${id}`, { replace: true });
 
+    // Find the house based on the id and use its shortName for the background
+    const selectedHouse = keyHouses.find(house => house.id === id);
+    setCurrentBackground(selectedHouse 
+      ? houseBackgrounds[selectedHouse.shortName] 
+      : houseBackgrounds.default
+    );
+
     // Fetch current lord
     setCurrentLord(await fetchCharacterDetails(houseDetails.currentLord));
 
@@ -103,7 +122,9 @@ export default function Houses() {
     if (!character) return null;
     return (
       <div className="mt-4">
-        <h3 className="text-2xl font-bold mb-2">{title}</h3>
+        <h3 className="text-xl font-bold mb-4 text-[#f9da5c] uppercase">
+          {title}
+        </h3>
         <div className="flex items-center">
           <img
             src={getImage(
@@ -133,31 +154,35 @@ export default function Houses() {
 
     return (
       <div className="mt-4">
-        <h3 className="text-2xl font-bold mb-2">Sworn Members</h3>
-        <ul className="list-disc pl-5">
+        <h3 className="text-xl font-bold mb-4 text-[#f9da5c] uppercase">
+          Sworn Members
+        </h3>
+        <ul className="list-none pl-0">
           {currentMembers.map((member, index) => (
-            <li key={index}>{member}</li>
+            <li key={index}>
+              <span className="mr-3">➳</span>
+              {member}
+            </li>
           ))}
         </ul>
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex gap-x-3 items-center mt-4">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            className="p-2 bg-gray-800 text-gray-200 rounded border-2 border-gray-600 hover:bg-gray-700 hover:border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 shadow-md hover:shadow-lg"
+            aria-label="Previous page"
           >
-            Previous
+            <ChevronLeft size={24} />
           </button>
-          <span>
-            Page {currentPage} of {pageCount}
-          </span>
           <button
             onClick={() =>
               setCurrentPage((prev) => Math.min(prev + 1, pageCount))
             }
             disabled={currentPage === pageCount}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            className="p-2 bg-gray-800 text-gray-200 rounded border-2 border-gray-600 hover:bg-gray-700 hover:border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 shadow-md hover:shadow-lg"
+            aria-label="Next page"
           >
-            Next
+            <ChevronRight size={24} />
           </button>
         </div>
       </div>
@@ -180,7 +205,7 @@ export default function Houses() {
                 onMouseEnter={() => setActiveHouse(house.id)}
                 onMouseLeave={() => {
                   const searchParams = new URLSearchParams(location.search);
-                  const houseId = searchParams.get('houseId');
+                  const houseId = searchParams.get("houseId");
                   setActiveHouse(houseId ? parseInt(houseId) : keyHouses[0].id);
                 }}
                 onClick={() => handleHouseClick(house.id)}
@@ -197,16 +222,24 @@ export default function Houses() {
           </ul>
         </nav>
       </div>
-      <div className="w-1/2 p-8 max-h-[95vh] overflow-y-scroll">
+      <div
+        className="w-1/2 p-8 max-h-[100vh] overflow-y-scroll"
+        style={{
+          backgroundImage: `url(${currentBackground})`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "right bottom",
+          backgroundSize: "650px",
+        }}
+      >
         <h1 className="thrones-font text-lg font-bold fixed right-8">Houses</h1>
         {selectedHouse ? (
           <div>
-            <h2 className="text-3xl font-bold mb-4 thrones-font ">
+            <h2 className="text-3xl font-bold mb-4 thrones-font tracking-widest max-w-[48%]">
               {selectedHouse.name}
             </h2>
-            <p>
-              <strong>Region:</strong> {selectedHouse.region}
-            </p>
+            <h3 className="text-xl font-bold mb-4 text-[#f9da5c] uppercase">
+              {selectedHouse.region}
+            </h3>
             <p>
               <strong>Coat of Arms:</strong> {selectedHouse.coatOfArms}
             </p>
