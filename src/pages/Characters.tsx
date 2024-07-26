@@ -48,12 +48,12 @@ export default function Characters() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#000] text-gray-100">
+    <div className="flex h-auto md:h-screen md:overflow-hidden bg-[#000] text-gray-100">
       <div className="w-full p-8 overflow-y-auto">
-        <h1 className="thrones-font text-lg font-bold fixed right-8 z-50">
+        <h1 className="hidden md:block thrones-font text-lg font-bold absolute md:fixed right-8 z-50 mr-4 md:mr-0">
           Characters
         </h1>
-        <div className="text-[#f9da5c] text-md font-bold fixed bottom-[2rem] right-0 md:right-8 uppercase z-50 rotate-90 md:rotate-0 -translate-y-24 md:-translate-y-0 translate-x-20 md:-translate-x-0 opacity-50 md:opacity-100">
+        <div className="text-[#f9da5c] text-md font-bold fixed bottom-[2rem] right-0 md:right-8 uppercase z-50 rotate-90 md:rotate-0 -translate-y-14 md:-translate-y-0 translate-x-14 md:-translate-x-0 opacity-50 md:opacity-100">
           <Link to="/" className="tracking-widest">
             Home
           </Link>
